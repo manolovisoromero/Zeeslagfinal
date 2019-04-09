@@ -3,6 +3,7 @@
  */
 package client;
 
+import REST.communicator;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -31,6 +32,7 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import REST.communicator;
 
 
 
@@ -130,6 +132,7 @@ public class SeaBattleApplication extends Application implements ISeaBattleGUI, 
     Button buttonPlaceSubmarine;
     Button buttonPlaceMineSweeper;
     Button buttonRemoveShip;
+    private Button Switch;
     
     // Flag to indicate whether square is selected in ocean area
     private boolean squareSelectedInOceanArea = false;
@@ -142,6 +145,8 @@ public class SeaBattleApplication extends Application implements ISeaBattleGUI, 
     public void start(Stage primaryStage) throws IOException {
 
         //log.info("Seabattle started");
+
+        REST.communicator comm = new REST.communicator();
 
         connector.getInstance().start();
 
@@ -296,7 +301,10 @@ public class SeaBattleApplication extends Application implements ISeaBattleGUI, 
         (EventHandler) event -> {
             try {
 
-                connector.getInstance().setToSend("Switch");
+                comm.postRegister(textFieldPlayerName.getText(),passwordFieldPlayerPassword.getText());
+
+
+
 
 
             } catch (Exception e) {
@@ -329,10 +337,12 @@ public class SeaBattleApplication extends Application implements ISeaBattleGUI, 
         buttonRemoveAllShips.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                removeAllShips();
+
+
+                connector.getInstance().setToSend("Switch");
             }
         });
-        buttonRemoveAllShips.setDisable(true);
+        buttonRemoveAllShips.setDisable(false);
         grid.add(buttonRemoveAllShips,1,22,1,3);
         
         // Button to notify that the player is ready to start playing
