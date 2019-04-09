@@ -17,6 +17,11 @@ public class logic {
         this.send = send;
     }
 
+    public void switchSend(){
+        this.send = !this.send;
+
+    }
+
     public boolean send = true;
 
 
@@ -46,10 +51,6 @@ public class logic {
         if(count == 100 || count == 0){
             setCalc();
 
-            if(count ==0){
-                Thread.sleep(2000);
-                setSend(false);
-            }
         }
 
         count = count + getCalc();
@@ -57,16 +58,17 @@ public class logic {
     }
 
 
-    public void sender(Session session) throws IOException, InterruptedException {
-        while(isSend() == true) {
-            Thread.sleep(50);
-            session.getAsyncRemote().sendText(Integer.toString(getCount()));
-        }
+    public void sender(Session session, String msgin) throws IOException, InterruptedException {
+        System.out.println(isSend());
+        String msg;
+        if(isSend()) {
+            msg = Integer.toString(getCount());
+        }else{ msg = "-";}
+        Thread.sleep(100);
+        session.getBasicRemote().sendText(msg);
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
+
 
     public int count = 1;
 

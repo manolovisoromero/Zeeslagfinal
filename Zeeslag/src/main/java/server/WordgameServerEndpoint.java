@@ -18,6 +18,7 @@ public class WordgameServerEndpoint {
     @OnOpen
     public String onOpen(Session session) throws IOException, InterruptedException {
         logger.info("Connected...." + session.getId());
+        session.getAsyncRemote().sendText("Start");
         return "open";
 
 
@@ -26,7 +27,9 @@ public class WordgameServerEndpoint {
 
     @OnMessage
     public void onMessage(String message, Session session) throws IOException, InterruptedException {
-        System.out.println(message);
+        logger.info("Received...."+ message);
+
+
         switch(message){
             case "quit":
                 try{
@@ -39,14 +42,10 @@ public class WordgameServerEndpoint {
                 //return "a";
         }
 
-        //logic.getInstance().setCalc();
-        if(logic.getInstance().send == false){
-            logic.getInstance().send = true;
-        }else{
-            logic.getInstance().send = false;}
-        logic.getInstance().sender(session);
-        if(message != "x"){message = message + "---";}
-        //return message;
+        if(message.equals("Switch")){
+            logic.getInstance().switchSend();
+        }
+        logic.getInstance().sender(session, message);
     }
 
     @OnClose

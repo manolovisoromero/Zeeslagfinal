@@ -20,6 +20,16 @@ public class connector implements  ISubject {
 
     public String servermsg;
 
+    public void setToSend(String toSend) {
+        this.toSend = toSend;
+    }
+
+    public String getToSend() {
+        return toSend;
+    }
+
+    public String toSend = "";
+
     public ArrayList<IObserver> getObservers() {
         return observers;
     }
@@ -55,8 +65,20 @@ public class connector implements  ISubject {
 
     }
 
-    public void send() throws IOException {
-        sesh.getAsyncRemote().sendText("client");
+    public void send(String msg)  {
+        setServermsg(msg);
+        if(getToSend() != "-"){
+            msg =  getToSend();
+            setToSend("-");
+        }else{msg = getToSend();}
+        try {
+            Thread.sleep(100);
+            sesh.getBasicRemote().sendText(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void Attach(IObserver o) {
@@ -72,9 +94,11 @@ public class connector implements  ISubject {
     }
 
     public void setServermsg(String msg){
-        this.servermsg = msg;
-        System.out.println("hoi");
-        Notify();
+        if(!msg.equals("-")){
+            this.servermsg = msg;
+            System.out.println("hoi");
+            Notify();
+        }
     }
 
     public String getServermsg(){

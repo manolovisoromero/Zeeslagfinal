@@ -296,7 +296,7 @@ public class SeaBattleApplication extends Application implements ISeaBattleGUI, 
         (EventHandler) event -> {
             try {
 
-                connector.getInstance().send();
+                connector.getInstance().setToSend("Switch");
 
 
             } catch (Exception e) {
